@@ -1,0 +1,125 @@
+{{>layout/header}}
+
+<!-- Page Header-->
+<header class="masthead" id="preview-image" style="background-image: url(); padding-bottom: 1rem;">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="post-heading">
+                    <input type="text" class="input-white w-30" id="category" placeholder="카테고리를 입력하세요" style="padding-bottom: 16px"
+                        {{#post}}
+                           value="{{post.category}}"
+                        {{/post}}
+                    />
+                    <h1>
+                        <input type="text" class="input-white w-100" id="title" placeholder="제목을 입력하세요"
+                            {{#post}}
+                               value="{{post.title}}"
+                            {{/post}}
+                        />
+                    </h1>
+                    <h2 class="subheading">
+                        <input type="text" class="input-white w-100" id="subtitle" placeholder="부제를 입력하세요"
+                            {{#post}}
+                                value="{{post.subtitle}}"
+                            {{/post}}
+                        />
+                    </h2>
+                    <span class="meta">
+                        Posted by
+                        <input type="text" class="input-white" id="author" placeholder="작성자를 입력하세요" style="width: 165px"
+                            {{#post}}
+                                value="{{post.author}}" readonly
+                            {{/post}}
+                            {{^post}}
+                                {{#userName}}
+                                    value="{{userName}}" readonly
+                                {{/userName}}
+                            {{/post}}
+                        />
+                    </span>
+                </div>
+                <div class="text-end" style="padding-top: 100px;">
+                    <button class="btn-upload btn btn-sm btn-secondary rounded">대표 이미지</button>
+                    <input id="input-image" type="file" hidden>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content-->
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center" style="margin-bottom: 30px;">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <textarea class="form-control editor" id="content">
+                    {{#post}}
+                        {{post.content}}
+                    {{/post}}
+                </textarea>
+            </div>
+        </div>
+
+        <div class="row gx-4 gx-lg-5 justify-content-center my-2">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <a href="/" role="button" class="btn btn-secondary">취소</a>
+                {{#post}}
+                    <input type="hidden" id="id" value="{{post.id}}" />
+                    <button type="button" class="btn btn-primary" id="btn-update">수정완료</button>
+                {{/post}}
+                {{^post}}
+                    <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+                {{/post}}
+            </div>
+        </div>
+    </div>
+</article>
+
+<script>
+    $(document).ready(function() {
+        //여기 아래 부분
+        $('.editor').summernote({
+              minHeight: 600,             // 최소 높이
+              maxHeight: null,            // 최대 높이
+              focus: false,               // 에디터 로딩후 포커스를 맞출지 여부
+              lang: "ko-KR",			  // 한글 설정
+              placeholder: "최대 2048자까지 쓸 수 있습니다."	//placeholder 설정
+        });
+
+        $('.btn-upload').click(function() {
+            $('#input-image').click();
+        });
+    });
+
+    function readImage(input) {
+
+        // input 태그에 파일이 있는 경우
+        if (input.files && input.files[0]) {
+
+            //이미지 파일인지 검사(생략
+
+            // FileReader 인스턴스 생성
+            const reader = new FileReader();
+
+            // 이미지가 로드가 된 경우
+            reader.onload = e => {
+                const previewImage = document.getElementById("preview-image")
+                var url = "url(" + e.target.result + ")";
+                previewImage.style.backgroundImage = url;
+            }
+
+            // reader가 이미지 읽도록 하기
+            reader.readAsDataURL(input.files[0])
+        }
+    }
+
+    // input file에 change 이벤트 부여
+    const inputImage = document.getElementById("input-image")
+    inputImage.addEventListener("change", e => {
+        readImage(e.target)
+    })
+
+</script>
+
+{{>layout/footer}}
