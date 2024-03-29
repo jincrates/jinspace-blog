@@ -1,6 +1,6 @@
 spring:
-    profiles:
-        include: oauth
+#    profiles:
+#        include: oauth
 
     jpa:
         database-platform: org.hibernate.dialect.H2Dialect
@@ -25,6 +25,23 @@ spring:
     session:
         store-type: jdbc
 
-    logging:
-        level:
-            me.jincrates: DEBUG
+    security:
+      oauth2:
+        client:
+          registration:
+            naver:
+              client-id: client-id
+              client-secret: client-secret
+              redirect-uri: redirect-uri
+              authorization-grant-type: authorization_code
+              scope:
+                - name
+                - email
+                - profile_image
+              client-name: Naver
+          provider:
+            naver:
+              authorization-uri: authorization-uri
+              token-uri: token-uri
+              user-info-uri: user-info-uri
+              user-name-attribute: response
